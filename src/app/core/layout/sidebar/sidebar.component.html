@@ -1,0 +1,117 @@
+<div class="flex flex-col h-full py-8 px-5 overflow-hidden relative" style="background: var(--bg-secondary);">
+
+  <!-- Brand Header -->
+  <div class="px-3 mb-10 cursor-pointer group" routerLink="/">
+    <app-logo [text]="'APP_NAME' | translate" [isInverse]="true"></app-logo>
+  </div>
+
+  <!-- Primary Navigation -->
+  <nav class="flex-1 space-y-1 overflow-y-auto scrollbar-hide pe-1" role="navigation">
+
+    <div class="text-[9px] font-mono uppercase tracking-[0.5em] mb-5 px-4 opacity-50"
+         style="color: var(--color-raqeeb-azure);">
+      {{ 'SIDEBAR.SECTION_MAIN' | translate }}
+    </div>
+
+    <a routerLink="/dashboard"
+       routerLinkActive="active"
+       class="nav-item group"
+       [routerLinkActiveOptions]="{ exact: true }"
+       id="nav-dashboard">
+      <i class="pi pi-layout text-[15px] transition-transform group-hover:scale-110"></i>
+      <span class="tracking-wide font-mono text-[11px]">{{ 'SIDEBAR.DASHBOARD' | translate }}</span>
+    </a>
+
+    <a routerLink="/attendance"
+       routerLinkActive="active"
+       class="nav-item group"
+       id="nav-attendance">
+      <i class="pi pi-calendar-clock text-[15px] transition-transform group-hover:scale-110"></i>
+      <span class="tracking-wide font-mono text-[11px]">{{ 'SIDEBAR.ATTENDANCE' | translate }}</span>
+    </a>
+
+    <a routerLink="/tasks"
+       routerLinkActive="active"
+       class="nav-item group"
+       id="nav-tasks">
+      <i class="pi pi-check-square text-[15px] transition-transform group-hover:scale-110"></i>
+      <span class="tracking-wide font-mono text-[11px]">{{ 'SIDEBAR.TASKS' | translate }}</span>
+    </a>
+
+    <a routerLink="/map"
+       routerLinkActive="active"
+       class="nav-item group"
+       id="nav-map">
+      <i class="pi pi-map text-[15px] transition-transform group-hover:scale-110"></i>
+      <span class="tracking-wide font-mono text-[11px]">{{ 'SIDEBAR.MAP' | translate }}</span>
+    </a>
+
+    <div class="pt-8 text-[9px] font-mono uppercase tracking-[0.5em] mb-5 px-4 opacity-40"
+         style="color: var(--text-secondary);">
+      {{ 'SIDEBAR.SECTION_LOGISTICS' | translate }}
+    </div>
+
+    <a routerLink="/finance"
+       routerLinkActive="active"
+       class="nav-item group"
+       id="nav-finance">
+      <i class="pi pi-database text-[15px] transition-transform group-hover:scale-110"></i>
+      <span class="tracking-wide font-mono text-[11px]">{{ 'SIDEBAR.FINANCE' | translate }}</span>
+    </a>
+
+    <a routerLink="/wallet"
+       routerLinkActive="active"
+       class="nav-item group"
+       id="nav-wallet">
+      <i class="pi pi-wallet text-[15px] transition-transform group-hover:scale-110"></i>
+      <span class="tracking-wide font-mono text-[11px]">{{ 'SIDEBAR.WALLET' | translate }}</span>
+    </a>
+
+    <a routerLink="/chat"
+       routerLinkActive="active"
+       class="nav-item group"
+       id="nav-chat">
+      <i class="pi pi-comments text-[15px] transition-transform group-hover:scale-110"></i>
+      <span class="tracking-wide font-mono text-[11px]">{{ 'SIDEBAR.CHAT' | translate }}</span>
+    </a>
+
+  </nav>
+
+  <!-- User Profile Section -->
+  <div class="mt-auto pt-6 border-t" style="border-color: var(--border-color);">
+    <div class="user-card p-5 rounded-xl relative overflow-hidden tactical-border" style="background: var(--bg-tertiary);">
+      <!-- Avatar & Info -->
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center font-mono font-black text-sm flex-shrink-0"
+             style="background: rgba(0,242,255,0.1); border: 1px solid rgba(0,242,255,0.2); color: var(--color-raqeeb-azure);">
+          {{ authService.$user()?.name?.substring(0, 2)?.toUpperCase() }}
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="text-[11px] font-black truncate uppercase tracking-tighter"
+             style="color: var(--text-primary);">
+            {{ authService.$user()?.name }}
+          </p>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="status-dot active"></span>
+            <p class="text-[8px] font-mono uppercase tracking-widest"
+               style="color: var(--color-raqeeb-azure); opacity: 0.8;">
+              {{ authService.$user()?.role }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logout Button -->
+      <button (click)="logout()"
+              id="btn-logout"
+              class="w-full py-3 text-[9px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-2 rounded-lg transition-all duration-200 border"
+              style="color: var(--text-secondary); border-color: var(--border-color); background: transparent;"
+              onmouseover="this.style.background='rgba(244,63,94,0.1)'; this.style.borderColor='rgba(244,63,94,0.3)'; this.style.color='#F43F5E'"
+              onmouseout="this.style.background='transparent'; this.style.borderColor='var(--border-color)'; this.style.color='var(--text-secondary)'">
+        <i class="pi pi-power-off text-[10px]"></i>
+        {{ 'SIDEBAR.LOGOUT' | translate }}
+      </button>
+    </div>
+  </div>
+
+</div>

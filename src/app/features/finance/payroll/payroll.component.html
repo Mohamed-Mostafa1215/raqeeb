@@ -1,0 +1,91 @@
+<div class="space-y-8 animate-in fade-in duration-1000">
+  
+  <div class="flex flex-col gap-1">
+    <h1 class="text-3xl font-black text-[var(--text-primary)] tracking-tight font-display">{{ 'PAYROLL.TITLE' | translate }}</h1>
+    <p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{{ 'PAYROLL.SUBTITLE' | translate }}</p>
+  </div>
+
+  @if (payroll()) {
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Current Earnings -->
+      <app-card [title]="'PAYROLL.CURRENT' | translate" subtitle="Month-to-date" customClass="lg:col-span-2">
+        <div header-actions class="flex items-center gap-2">
+           <span class="text-[10px] font-black text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">Operational Bonus: +500 SAR</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 py-6">
+           <div class="space-y-2">
+              <span class="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em]">Gross Salary</span>
+              <div class="text-5xl font-black text-[var(--text-primary)] tracking-tighter font-display">{{ payroll().currentEarnings | number }} <span class="text-sm">SAR</span></div>
+           </div>
+           <div class="space-y-6 pt-2">
+              <div class="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">
+                 <span>Verification Accuracy</span>
+                 <span class="text-raqeeb-azure">98.2%</span>
+              </div>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                 <div class="h-full bg-raqeeb-azure animate-progress" style="width: 98.2%"></div>
+              </div>
+              <p class="text-[9px] font-bold text-[var(--text-secondary)] opacity-60 italic">Salary processed via Raqeeb Protocol V5.0 SaaS</p>
+           </div>
+        </div>
+      </app-card>
+
+      <!-- Last Payout Highlight -->
+      <app-card [title]="'PAYROLL.LAST' | translate" subtitle="Transaction Finalized" customClass="bg-raqeeb-navy text-white border-raqeeb-navy shadow-raqeeb-navy/40">
+        <div class="flex flex-col h-full justify-center gap-2">
+           <div class="text-4xl font-black tracking-tighter">{{ payroll().lastPayout | number }} <span class="text-xs uppercase opacity-60 ps-2">SAR</span></div>
+           <div class="flex items-center gap-2 text-[10px] font-black text-raqeeb-azure uppercase mt-4">
+              <i class="pi pi-verified"></i>
+              <span>Payment Protocol Success</span>
+           </div>
+        </div>
+      </app-card>
+    </div>
+
+    <!-- History Table -->
+    <app-card [title]="'PAYROLL.HISTORY' | translate" subtitle="Audit Log" contentClass="overflow-x-auto">
+        <div class="overflow-x-auto">
+           <table class="w-full border-separate border-spacing-0">
+              <thead>
+                 <tr class="bg-slate-50/50 dark:bg-slate-800/50">
+                    <th class="py-5 ps-8 text-start uppercase tracking-widest">Billing Cycle</th>
+                    <th class="py-5 px-4 text-start uppercase tracking-widest">Amount (SAR)</th>
+                    <th class="py-5 px-4 text-start uppercase tracking-widest">Verification Status</th>
+                    <th class="py-5 pe-8 text-end uppercase tracking-widest">Payload</th>
+                 </tr>
+              </thead>
+              <tbody class="divide-y divide-[var(--border-color)]">
+                 @for (item of payroll().history; track item.month) {
+                   <tr class="hoverable group transition-all duration-300">
+                      <td class="py-6 ps-8">
+                         <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-raqeeb-azure/5 rounded-xl flex items-center justify-center border border-raqeeb-azure/10 group-hover:bg-raqeeb-azure group-hover:text-white transition-all text-raqeeb-azure">
+                               <i class="pi pi-calendar text-xs"></i>
+                            </div>
+                            <span class="font-black text-sm text-[var(--text-primary)] uppercase tracking-tight">{{ item.month }}</span>
+                         </div>
+                      </td>
+                      <td class="py-6 px-4">
+                         <span class="font-black text-sm text-[var(--text-primary)]">{{ item.amount | number }}</span>
+                      </td>
+                      <td class="py-6 px-4">
+                         <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-[9px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20">Disbursed</span>
+                         </div>
+                      </td>
+                      <td class="py-6 pe-8 text-end">
+                         <button (click)="downloadSlip(item.month)" 
+                                 class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 text-[var(--text-secondary)] hover:text-white hover:bg-raqeeb-azure transition-all shadow-sm flex items-center justify-center ms-auto">
+                           <i class="pi pi-download"></i>
+                         </button>
+                      </td>
+                   </tr>
+                 }
+              </tbody>
+           </table>
+        </div>
+     </app-card>
+  }
+</div>

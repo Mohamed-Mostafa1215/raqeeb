@@ -1,0 +1,93 @@
+{
+  "APP_NAME": "RAQEEB",
+  "NAVBAR": {
+    "SEARCH": "SEARCH..."
+  },
+  "DASHBOARD": {
+    "TITLE": "Raqeeb Operations Dashboard",
+    "SUBTITLE": "Real-time Operations Tracking & Analytics",
+    "UPTIME": "UPTIME: 100%",
+    "LATENCY": "LATENCY: 12ms",
+    "STATS": {
+      "TOTAL_EMPLOYEES": "Total Employees",
+      "ACTIVE": "Active",
+      "STATUS": "Operational Status",
+      "PROJECT_COMPLETION": "Projects Completion",
+      "DEPLOYMENTS": "Active Deployments"
+    },
+    "MAP_TITLE": "Logistics & Dispatch Map",
+    "INTEL_KEY": "Intelligence Key",
+    "FLEET": "Fleet Load Distribution",
+    "PERSONNEL": "Personnel Flow",
+    "PULSE": "Active Deployment Pulse",
+    "MILESTONES": "Project Evolution"
+  },
+  "ATTENDANCE": {
+    "TITLE": "Attendance Sync",
+    "BIO": "Biometric Verification & Geofence Validation",
+    "CLOCK_IN": "Clock-in (FaceID)",
+    "CLOCK_OUT": "Clock-out",
+    "VERIFYING": "Scanning Biometrics...",
+    "SECURED": "Protocol Channel Secured",
+    "IN_RANGE": "Sector 7: Within Range",
+    "OUT_RANGE": "Outside Geofence Bounds"
+  },
+  "TASKS": {
+    "TITLE": "Active Operations",
+    "SUBTITLE": "Manage node assignments and upload evidence",
+    "PRIORITY": "Priority",
+    "BEFORE": "Before Proof",
+    "AFTER": "After Proof",
+    "UPLOAD": "Upload Photos"
+  },
+  "PAYROLL": {
+    "TITLE": "Payroll Dashboard",
+    "SUBTITLE": "Review earnings and historical payouts",
+    "CURRENT": "Current Period",
+    "LAST": "Last Payout",
+    "HISTORY": "Payment History"
+  },
+  "CHAT": {
+    "TITLE": "Channels",
+    "SECURE_CHANNEL": "Secure Operations Channel",
+    "TRANSMIT": "Transmit Operational Data..."
+  },
+  "SIDEBAR": {
+    "SECTION_MAIN": "Control_Sectors",
+    "SECTION_LOGISTICS": "Logistics_Array",
+    "DASHBOARD": "Dashboard",
+    "ATTENDANCE": "Attendance",
+    "TASKS": "Tasks",
+    "MAP": "Live Map",
+    "FINANCE": "Finance",
+    "WALLET": "Wallet",
+    "CHAT": "Chat",
+    "LOGOUT": "Disconnect"
+  },
+  "LOADING": "Synchronizing...",
+  "LOGIN": {
+    "TITLE": "Command Entry",
+    "ACCESS_PORTAL": "Access_Portal",
+    "ENCRYPTION_ACTIVE": "Encryption Active",
+    "USER_ID": "User_ID",
+    "PASSCODE": "Passcode_Array",
+    "USERNAME_LABEL": "Deployment Identifier",
+    "USERNAME_PH": "OPERATOR ID / EMAIL",
+    "PASSWORD_LABEL": "Security Sequence",
+    "BTN": "Authenticate Access",
+    "FORGOT_LINK": ">> [Forgot_Passphrase]",
+    "SYSTEM_INTEGRITY": "System_Integrity",
+    "SEC_LOAD": "SEC_LOAD: 88%",
+    "PROTOCOL": "Protocol: SaaS v.4.0.0-PRO",
+    "FORGOT": "Lost Biometric Credentials?",
+    "AUTHORIZED": "Authorized Personnel Only"
+  },
+  "WALLET": {
+    "TITLE": "Tactical Financial Ledger",
+    "SUBTITLE": "Sector Capital & Flow Monitoring",
+    "CAPITAL": "Net Operations Capital",
+    "WITHDRAW": "Initialize Allocation",
+    "HISTORY": "Audit Trail History",
+    "AMOUNT": "Transfer Amount"
+  }
+}

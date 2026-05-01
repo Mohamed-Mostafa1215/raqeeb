@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Worker Dashboard - GlobalTrack</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols for icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3c83f6',
+            darkBlue: '#1e293b',
+            deepBg: '#0f172a',
+            skyBlue: '#0ea5e9',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          borderRadius: {
+            'custom': '8px',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="global-typography">
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    /* Arabic text rendering improvement */
+    [lang="ar"] {
+      line-height: 1.6;
+    }
+  </style>
+<style data-purpose="animation-styles">
+    .face-scan-ring {
+      border: 2px solid #3c83f6;
+      border-top-color: transparent;
+      animation: spin 3s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .scanning-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: rgba(60, 131, 246, 0.8);
+      box-shadow: 0 0 15px 2px rgba(60, 131, 246, 0.8);
+      top: 0;
+      animation: scan 2s ease-in-out infinite;
+      z-index: 10;
+    }
+    @keyframes scan {
+      0% { top: 10%; }
+      50% { top: 90%; }
+      100% { top: 10%; }
+    }
+    .hidden-scan {
+      display: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-20">
+<!-- BEGIN: Header -->
+<header class="p-6 flex justify-between items-center bg-darkBlue border-b border-slate-800" data-purpose="main-header">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center font-bold text-white">
+        أ
+      </div>
+<div>
+<h1 class="text-sm text-slate-400">مرحباً بك،</h1>
+<p class="font-bold text-lg">أحمد محمد</p>
+</div>
+</div>
+<div class="relative">
+<span class="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-darkBlue rounded-full"></span>
+<svg class="h-6 w-6 text-slate-300" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</header>
+<!-- END: Header -->
+<main class="p-4 space-y-6">
+<!-- BEGIN: AttendanceSection -->
+<section class="flex flex-col items-center py-8 bg-slate-800/50 rounded-custom border border-slate-700 relative overflow-hidden" data-purpose="attendance-control">
+<h2 class="text-slate-300 mb-6 font-medium">تسجيل الحضور والانصراف</h2>
+<!-- FaceID Scanning Visualization -->
+<div class="relative w-48 h-48 flex items-center justify-center mb-4">
+<div class="absolute inset-0 face-scan-ring rounded-full"></div>
+<div class="w-40 h-40 rounded-full overflow-hidden border-4 border-slate-700 bg-slate-900 flex items-center justify-center relative">
+<!-- Scanning Line Overlay (Hidden by default) -->
+<div class="scanning-line hidden-scan" id="face-scanner"></div>
+<!-- Placeholder for FaceID/Camera Preview -->
+<svg class="h-20 w-20 text-slate-700" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
+</svg>
+</div>
+<div class="absolute bottom-2 bg-primary px-3 py-1 rounded-full text-xs font-bold shadow-lg">FaceID</div>
+</div>
+<!-- GPS Status Indicator -->
+<div class="flex items-center gap-1.5 mb-6 text-green-400 text-xs font-medium">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span>الموقع: داخل النطاق</span>
+</div>
+<button class="bg-primary hover:bg-blue-600 text-white font-bold py-4 px-12 rounded-custom transition-all active:scale-95 shadow-lg shadow-primary/20 w-3/4" data-purpose="clock-in-action" id="clock-in-btn">
+        تسجيل حضور
+      </button>
+<p class="mt-4 text-xs text-slate-500">آخر عملية: 08:30 صباحاً (تسجيل انصراف)</p>
+</section>
+<!-- END: AttendanceSection -->
+<!-- BEGIN: FinancialSummary -->
+<section class="bg-darkBlue p-5 rounded-custom border border-slate-700" data-purpose="financial-summary">
+<h3 class="text-sm font-semibold text-slate-400 mb-4">الملخص المالي (الشهر الحالي)</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<div>
+<span class="block text-xs text-slate-500">إجمالي الراتب</span>
+<span class="text-xl font-bold text-skyBlue">4,500 ريال</span>
+</div>
+<div class="text-left">
+<span class="block text-xs text-slate-500">السلف</span>
+<span class="text-md font-semibold text-red-400">500- ريال</span>
+</div>
+</div>
+<!-- Simple Bar Chart -->
+<div class="w-full h-3 bg-slate-700 rounded-full overflow-hidden flex">
+<div class="h-full bg-skyBlue" style="width: 85%"></div>
+<div class="h-full bg-red-400" style="width: 15%"></div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-500 italic">
+<span>المستحق: 4,000 ريال</span>
+<span>تاريخ الصرف المتوقع: 27 مايو</span>
+</div>
+</div>
+</section>
+<!-- END: FinancialSummary -->
+<!-- BEGIN: TaskCards -->
+<section class="space-y-4" data-purpose="tasks-list">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-lg">المهام اليومية</h3>
+<span class="bg-slate-700 text-[10px] px-2 py-1 rounded text-slate-300">3 مهام متبقية</span>
+</div>
+<!-- Task Card 1 -->
+<div class="bg-slate-800 p-4 rounded-custom border-r-4 border-primary shadow-sm space-y-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-slate-100 text-md">تنظيف الموقع أ - الدور الثالث</h4>
+<p class="text-xs text-slate-400">الموعد النهائي: 02:00 م</p>
+</div>
+<span class="bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 font-bold">
+<span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
+كاميرا حية
+</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- Before Photo -->
+<button class="flex flex-col items-center justify-center border-2 border-dashed border-slate-600 rounded-custom p-3 bg-slate-900/50 hover:border-skyBlue group transition-colors">
+<svg class="h-6 w-6 text-slate-500 group-hover:text-skyBlue" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 text-slate-400">صورة "قبل"</span>
+</button>
+<!-- After Photo -->
+<button class="flex flex-col items-center justify-center border-2 border-dashed border-slate-600 rounded-custom p-3 bg-slate-900/50 hover:border-skyBlue group transition-colors">
+<svg class="h-6 w-6 text-slate-500 group-hover:text-skyBlue" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 text-slate-400">صورة "بعد"</span>
+</button>
+</div>
+<button class="w-full bg-slate-700 text-slate-300 py-2 rounded-custom text-sm font-medium opacity-50 cursor-not-allowed">
+          إرسال المهمة
+        </button>
+</div>
+<!-- Task Card 2 (Completed Example) -->
+<div class="bg-slate-800/40 p-4 rounded-custom border-r-4 border-green-500 shadow-sm opacity-80">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-slate-400 text-md line-through">فحص معدات السلامة</h4>
+<p class="text-[10px] text-green-500 font-bold">مكتمل ✓</p>
+</div>
+<span class="bg-slate-700/50 text-slate-500 text-[10px] px-2 py-0.5 rounded-full font-medium">كاميرا حية</span>
+</div>
+</div>
+</section>
+<!-- END: TaskCards -->
+</main>
+<!-- BEGIN: BottomNavigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-darkBlue border-t border-slate-800 px-6 py-3 flex justify-between items-center z-50" data-purpose="bottom-navigation">
+<button class="flex flex-col items-center gap-1 text-primary">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px]">الرئيسية</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px]">مهامي</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px]">المالية</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px]">الملف</span>
+</button>
+</nav>
+<!-- END: BottomNavigation -->
+<script data-purpose="ui-interactions">
+    const clockInBtn = document.getElementById('clock-in-btn');
+    const scanner = document.getElementById('face-scanner');
+    let clockedIn = false;
+
+    clockInBtn.addEventListener('click', () => {
+      // Start scanning animation
+      scanner.classList.remove('hidden-scan');
+      clockInBtn.disabled = true;
+      clockInBtn.classList.add('opacity-80');
+      
+      const originalText = clockInBtn.textContent;
+      clockInBtn.textContent = 'جاري المسح...';
+
+      // Simulate FaceID processing delay
+      setTimeout(() => {
+        clockedIn = !clockedIn;
+        scanner.classList.add('hidden-scan');
+        clockInBtn.disabled = false;
+        clockInBtn.classList.remove('opacity-80');
+
+        if (clockedIn) {
+          clockInBtn.textContent = 'تسجيل انصراف';
+          clockInBtn.classList.remove('bg-primary');
+          clockInBtn.classList.add('bg-red-500');
+          alert('تم التحقق من الوجه بنجاح. تسجيل الحضور مكتمل.');
+        } else {
+          clockInBtn.textContent = 'تسجيل حضور';
+          clockInBtn.classList.remove('bg-red-500');
+          clockInBtn.classList.add('bg-primary');
+          alert('تم التحقق من الوجه بنجاح. تسجيل الانصراف مكتمل.');
+        }
+      }, 2000);
+    });
+  </script>
+</body></html>

@@ -1,0 +1,60 @@
+<div class="h-[calc(100vh-160px)] flex gap-8 animate-in fade-in duration-1000 overflow-hidden">
+  
+  <!-- Threads Sidebar -->
+  <div class="w-80 flex flex-col gap-6 h-full">
+     <div class="flex flex-col gap-1">
+        <h1 class="text-3xl font-black text-[var(--text-primary)] tracking-tight font-display">{{ 'CHAT.TITLE' | translate }}</h1>
+        <p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">End-to-end Encrypted</p>
+     </div>
+
+     <div class="flex-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[2.5rem] p-4 flex flex-col gap-2 overflow-y-auto scrollbar-hide shadow-[var(--card-shadow)]">
+        @for (thread of threads(); track thread.id) {
+          <div (click)="activeThread.set(thread)"
+               [class]="'p-4 rounded-2xl cursor-pointer transition-all flex items-center gap-4 group ' + (activeThread()?.id === thread.id ? 'bg-raqeeb-azure shadow-lg shadow-raqeeb-azure/20' : 'hover:bg-[var(--bg-primary)]')">
+             <div class="w-12 h-12 bg-white/10 rounded-xl flex-shrink-0 flex items-center justify-center font-black text-white relative">
+                {{ thread.name?.substring(0, 2) || '??' }}
+                @if (thread.online) {
+                  <div class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-[var(--bg-secondary)] rounded-full"></div>
+                }
+             </div>
+             <div class="min-w-0">
+                <p [class]="'text-sm font-black truncate ' + (activeThread()?.id === thread.id ? 'text-white' : 'text-[var(--text-primary)]')">{{ thread.name }}</p>
+                <p [class]="'text-[10px] font-bold uppercase tracking-tight truncate ' + (activeThread()?.id === thread.id ? 'text-white/60' : 'text-[var(--text-secondary)]')">{{ thread.lastMessage }}</p>
+             </div>
+          </div>
+        }
+     </div>
+  </div>
+
+  <!-- Messages Area -->
+  <app-card [title]="activeThread()?.name || 'CHAT.SECURE_CHANNEL' | translate" subtitle="Operational Frequency: 440Hz" customClass="flex-1 flex flex-col h-full overflow-hidden" contentClass="flex flex-col h-full">
+     <div header-actions class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+        <span class="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Active Link</span>
+     </div>
+
+     <!-- Messages List -->
+     <div class="flex-1 overflow-y-auto p-2 space-y-4 scrollbar-hide">
+        @for (msg of messages(); track msg.id) {
+          <div [class]="'flex flex-col ' + (msg.isMe ? 'items-end' : 'items-start')">
+             <div [class]="'max-w-[80%] p-4 rounded-3xl shadow-sm ' + 
+                          (msg.isMe ? 'bg-raqeeb-navy text-white rounded-tr-none' : 'bg-[var(--bg-primary)] text-[var(--text-primary)] border border-[var(--border-color)] rounded-tl-none')">
+                <p class="text-xs font-bold leading-relaxed">{{ msg.text }}</p>
+             </div>
+             <span class="text-[8px] font-black text-[var(--text-secondary)] uppercase mt-2 px-2">{{ msg.time }}</span>
+          </div>
+        }
+     </div>
+
+     <!-- Input Area -->
+     <div footer class="pt-6 mt-auto border-t border-[var(--border-color)]">
+        <div class="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-2xl p-2 flex items-center group focus-within:ring-4 focus-within:ring-raqeeb-azure/10 transition-all">
+           <input type="text" [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" [placeholder]="'CHAT.TRANSMIT' | translate"
+                  class="flex-1 bg-transparent px-4 text-xs font-bold text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]">
+           <button (click)="sendMessage()" class="w-10 h-10 bg-raqeeb-azure text-white rounded-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg">
+              <i class="pi pi-send text-xs"></i>
+           </button>
+        </div>
+     </div>
+  </app-card>
+</div>

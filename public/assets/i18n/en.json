@@ -1,0 +1,67 @@
+{
+  "APP_NAME": "Masar",
+  "DASHBOARD": {
+    "TITLE": "Masar Operations Center",
+    "SUBTITLE": "Real-time network traffic and deployment logs",
+    "STATS": {
+      "TOTAL_EMPLOYEES": "Total Assets",
+      "ACTIVE": "Online",
+      "STATUS": "Operational Status",
+      "PROJECT_COMPLETION": "Mission Completion",
+      "DEPLOYMENTS": "Active Nodes"
+    },
+    "MAP_TITLE": "Geo-Spatial Logistics Terminal",
+    "INTEL_KEY": "Intelligence Legend",
+    "FLEET": "Fleet Allocation Matrix",
+    "PERSONNEL": "Human Capital Flow",
+    "PULSE": "Deployment Pulse",
+    "MILESTONES": "Mission Roadmap"
+  },
+  "ATTENDANCE": {
+    "TITLE": "Attendance Sync",
+    "BIO": "Biometric & Geo-fencing Scan",
+    "CLOCK_IN": "Initialize Shift (FaceID)",
+    "CLOCK_OUT": "Terminate Session",
+    "VERIFYING": "Analyzing Biometrics...",
+    "SECURED": "Protocol Channel Secured",
+    "IN_RANGE": "Sector 7: In-Range",
+    "OUT_RANGE": "Outside Authorized Perimeter"
+  },
+  "TASKS": {
+    "TITLE": "Active Missions",
+    "SUBTITLE": "Task Management & Field Evidence",
+    "PRIORITY": "Priority Level",
+    "BEFORE": "Pre-Op",
+    "AFTER": "Post-Op",
+    "UPLOAD": "Record Evidence"
+  },
+  "PAYROLL": {
+    "TITLE": "Financial Terminal",
+    "SUBTITLE": "Revenue audit & historical payouts",
+    "CURRENT": "Active Cycle Earnings",
+    "LAST": "Protocol Finalized (Last)",
+    "HISTORY": "Transaction History"
+  },
+  "CHAT": {
+    "TITLE": "Comms Terminal",
+    "SECURE_CHANNEL": "Secure Operations Channel",
+    "TRANSMIT": "Transmit Data..."
+  },
+  "SIDEBAR": {
+    "DASHBOARD": "Command Center",
+    "ATTENDANCE": "Logistics Sync",
+    "TASKS": "Field Missions",
+    "MAP": "Live Grid",
+    "FINANCE": "Financial Hub",
+    "CHAT": "Encrypted Comms"
+  },
+  "LOGIN": {
+    "TITLE": "System Access",
+    "USERNAME_LABEL": "Deployment ID",
+    "USERNAME_PH": "Operator ID / Email",
+    "PASSWORD_LABEL": "Security Sequence",
+    "BTN": "Authenticate",
+    "FORGOT": "Lost Biometrics?",
+    "AUTHORIZED": "Authorized Personnel Only"
+  }
+}

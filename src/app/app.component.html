@@ -1,0 +1,69 @@
+<div [attr.data-theme]="themeService.theme()" class="min-h-screen transition-colors duration-300 font-main selection:bg-raqeeb-azure/40">
+  <p-toast />
+
+  @if (authService.$isLoggedIn()) {
+    <div class="flex h-screen overflow-hidden" style="background: var(--bg-primary);">
+
+      <!-- Sidebar — Fixed width on desktop -->
+      <aside [class]="'fixed lg:static inset-y-0 start-0 z-50 transition-transform duration-500 lg:translate-x-0 ' +
+                     (isMobileMenuOpen() ? 'translate-x-0 shadow-2xl' : (languageService.currentLang() === 'ar' ? 'translate-x-full' : '-translate-x-full'))"
+             style="width: var(--nav-width); flex-shrink: 0;">
+        <app-sidebar (closeSidebar)="closeMobileMenu()" />
+      </aside>
+
+      <!-- Mobile Overlay -->
+      @if (isMobileMenuOpen()) {
+        <div class="fixed inset-0 z-40 lg:hidden transition-opacity duration-300"
+             style="background: rgba(5,7,17,0.6); backdrop-filter: blur(4px);"
+             (click)="closeMobileMenu()">
+        </div>
+      }
+
+      <!-- Main Content Area -->
+      <main class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        <app-navbar (toggleMenu)="toggleMobileMenu()" />
+
+        <!-- Scrollable Page Content with Route Animation -->
+        <div class="flex-1 overflow-y-auto scrollbar-hide" style="padding: var(--space-8) var(--space-10);">
+          <div class="max-w-[1600px] mx-auto w-full">
+            <div class="route-wrapper">
+              <router-outlet />
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+  } @else {
+    <main class="min-h-screen relative" style="background: var(--bg-primary);">
+      <div class="animate-fade-in">
+        <router-outlet />
+      </div>
+    </main>
+  }
+
+  <!-- Global Loading Overlay with Skeleton feel -->
+  @if (loadingService.isLoading()) {
+    <div class="fixed inset-0 z-[200] flex items-center justify-center animate-fade-in"
+         style="background: rgba(5,7,17,0.85); backdrop-filter: blur(8px);">
+      <div class="flex flex-col items-center gap-6">
+        <!-- Animated loader -->
+        <div class="relative w-14 h-14">
+          <div class="absolute inset-0 rounded-full border-2 opacity-20"
+               style="border-color: var(--color-raqeeb-azure);"></div>
+          <div class="absolute inset-0 rounded-full border-2 border-t-transparent animate-spin"
+               style="border-color: var(--color-raqeeb-azure);"></div>
+          <div class="absolute inset-3 rounded-full"
+               style="background: rgba(0,242,255,0.1);"></div>
+        </div>
+        <div class="text-center">
+          <p class="text-[10px] font-mono uppercase tracking-[0.4em]"
+             style="color: var(--color-raqeeb-azure); opacity: 0.7;">
+            {{ 'LOADING' | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

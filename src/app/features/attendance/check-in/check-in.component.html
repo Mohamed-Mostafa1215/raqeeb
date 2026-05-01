@@ -1,0 +1,87 @@
+<div class="max-w-4xl mx-auto space-y-8">
+  
+  <div class="flex flex-col items-center text-center gap-2 mb-12">
+    <h1 class="text-4xl font-black text-[var(--text-primary)] tracking-tighter font-display">{{ 'ATTENDANCE.TITLE' | translate }}</h1>
+    <p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.3em] opacity-60">{{ 'ATTENDANCE.BIO' | translate }}</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    
+    <!-- FaceID Scanner Simulation -->
+    <div class="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[3rem] p-10 flex flex-col items-center justify-center relative overflow-hidden group shadow-[var(--card-shadow)]">
+       <!-- Scanning State -->
+       <div [class]="'absolute inset-0 transition-opacity ' + (isVerifying() ? 'opacity-100' : 'opacity-0')">
+          <div class="absolute inset-0 bg-raqeeb-azure/10"></div>
+          <div class="absolute top-0 left-0 w-full h-1 bg-raqeeb-azure shadow-[0_0_20px_rgba(59,130,246,0.3)]"></div>
+       </div>
+
+       <div class="relative w-48 h-48 mb-8">
+          <div [class]="'absolute inset-0 border-4 border-dashed rounded-full transition-colors ' + (isVerifying() ? 'border-raqeeb-azure' : 'border-[var(--border-color)]')"></div>
+          <div class="absolute inset-4 bg-[var(--bg-primary)] rounded-full flex items-center justify-center border border-[var(--border-color)] shadow-inner">
+             <i [class]="'pi text-5xl transition-colors ' + 
+                         (isVerifying() ? 'pi-spin pi-spinner text-raqeeb-azure' : 
+                          isClockedIn() ? 'pi-check-circle text-emerald-500' : 'pi-user text-[var(--text-secondary)]')"></i>
+          </div>
+       </div>
+
+       @if (!isClockedIn()) {
+         <button (click)="verify()" [disabled]="isVerifying()"
+                 class="px-10 py-5 bg-raqeeb-navy text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:bg-raqeeb-azure active:scale-95 transition-colors disabled:opacity-50 disabled:pointer-events-none group/btn relative overflow-hidden">
+            <span class="relative z-10">{{ isVerifying() ? ('ATTENDANCE.VERIFYING' | translate) : ('ATTENDANCE.CLOCK_IN' | translate) }}</span>
+         </button>
+       } @else {
+         <button (click)="clockOut()"
+                 class="px-10 py-5 bg-rose-500/10 text-rose-500 border border-rose-500/20 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-rose-500 hover:text-white transition-all shadow-lg">
+           {{ 'ATTENDANCE.CLOCK_OUT' | translate }}
+         </button>
+       }
+
+       <div class="mt-8 flex flex-col items-center gap-2">
+          <div class="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+             <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+             <span class="text-[8px] font-black text-emerald-500 uppercase tracking-widest">{{ 'ATTENDANCE.SECURED' | translate }}</span>
+          </div>
+       </div>
+    </div>
+
+    <!-- Status & Logs -->
+    <div class="flex flex-col gap-8">
+       <!-- Location Status -->
+       <div class="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[2.5rem] p-8 shadow-[var(--card-shadow)]">
+          <div class="flex items-center gap-5">
+             <div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center">
+                <i class="pi pi-map-marker text-emerald-500 text-xl"></i>
+             </div>
+             <div>
+                <h4 class="text-sm font-black text-[var(--text-primary)] uppercase tracking-tight">{{ 'ATTENDANCE.IN_RANGE' | translate }}</h4>
+                <p class="text-[10px] font-bold text-[var(--text-secondary)] mt-1">
+                   {{ (attendanceService.$isClockedIn() && attendanceService.$lastCheckIn()?.location === 'GPS_UNAVAILABLE') 
+                      ? 'Verified via Biometric Override' : 'Verified Sector: KAFD_HQ' }}
+                </p>
+             </div>
+          </div>
+       </div>
+
+       <!-- Last Check-in -->
+       <div class="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[2.5rem] p-8 shadow-[var(--card-shadow)] flex-1 flex flex-col justify-center items-center text-center">
+          <span class="text-[9px] font-black text-raqeeb-azure uppercase tracking-[.3em] mb-4 opacity-100">{{ isClockedIn() ? 'Active Session' : 'No Active Session' }}</span>
+          <div class="text-5xl font-black text-[var(--text-primary)] font-display tracking-tighter mb-2">
+            {{ isClockedIn() ? (attendanceService.$lastCheckIn()?.time | date:'shortTime') : '--:--' }}
+          </div>
+          <p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase">Current Shift Entry</p>
+          
+          @if (isClockedIn()) {
+            <div class="mt-8 w-full bg-[var(--bg-primary)] rounded-2xl p-4 border border-[var(--border-color)]">
+               <div class="flex justify-between items-center text-[10px] font-black uppercase mb-2">
+                  <span class="text-[var(--text-secondary)]">Work Progress</span>
+                  <span class="text-raqeeb-azure">4.2 Hrs</span>
+               </div>
+               <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div class="h-full bg-raqeeb-azure" style="width: 52.5%"></div>
+               </div>
+            </div>
+          }
+       </div>
+    </div>
+  </div>
+</div>

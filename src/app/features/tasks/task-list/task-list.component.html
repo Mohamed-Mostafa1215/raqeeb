@@ -1,0 +1,76 @@
+<div class="space-y-8">
+  
+  <div class="flex flex-col gap-1">
+    <h1 class="text-3xl font-black text-[var(--text-primary)] tracking-tight font-display">{{ 'TASKS.TITLE' | translate }}</h1>
+    <p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{{ 'TASKS.SUBTITLE' | translate }}</p>
+  </div>
+
+  @if (store.isLoading()) {
+    <div class="flex flex-col items-center justify-center py-20 opacity-40">
+       <i class="pi pi-spin pi-spinner text-3xl text-raqeeb-azure mb-4"></i>
+       <span class="text-[10px] font-black uppercase tracking-[0.3em]">Syncing Sector Data...</span>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      @for (task of store.filteredTasks(); track task.id) {
+        <app-card [title]="task.title" [subtitle]="'ID: ' + task.id">
+          <div header-actions class="flex items-center gap-2">
+            <span [class]="'text-[8px] font-black px-2 py-0.5 rounded-md uppercase ' + 
+                           (task.priority === 'high' ? 'bg-rose-500/10 text-rose-500' : 'bg-raqeeb-azure/10 text-raqeeb-azure')">
+              {{ 'TASKS.PRIORITY' | translate }}: {{ task.priority }}
+            </span>
+          </div>
+
+          <div class="space-y-6">
+             <p class="text-sm font-bold text-[var(--text-secondary)] leading-relaxed">{{ task.description }}</p>
+
+             <!-- Status Timeline Mock -->
+             <div class="flex items-center gap-4 py-4 border-y border-[var(--border-color)]">
+                <button (click)="updateStatus(task.id, 'pending')" [class]="'flex-1 py-2 text-[9px] font-black uppercase rounded-xl transition-colors ' + (task.status === 'pending' ? 'bg-raqeeb-navy text-white' : 'bg-[var(--bg-primary)] text-[var(--text-secondary)]')">Assigned</button>
+                <i class="pi pi-angle-right text-[var(--text-secondary)] opacity-30 text-[10px]"></i>
+                <button (click)="updateStatus(task.id, 'in-progress')" [class]="'flex-1 py-2 text-[9px] font-black uppercase rounded-xl transition-colors ' + (task.status === 'in-progress' ? 'bg-raqeeb-azure text-white shadow-lg shadow-raqeeb-azure/20' : 'bg-[var(--bg-primary)] text-[var(--text-secondary)]')">In Progress</button>
+                <i class="pi pi-angle-right text-[var(--text-secondary)] opacity-30 text-[10px]"></i>
+                <button (click)="updateStatus(task.id, 'completed')" [class]="'flex-1 py-2 text-[9px] font-black uppercase rounded-xl transition-colors ' + (task.status === 'completed' ? 'bg-emerald-500 text-white' : 'bg-[var(--bg-primary)] text-[var(--text-secondary)]')">Completed</button>
+             </div>
+
+             <!-- Photo Evidence Slots -->
+             <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-3">
+                   <span class="text-[9px] font-black text-[var(--text-secondary)] uppercase tracking-widest">{{ 'TASKS.BEFORE' | translate }}</span>
+                   <div (click)="uploadMedia(task.id, 'before')" 
+                        role="button"
+                        tabindex="0"
+                        (keydown.enter)="uploadMedia(task.id, 'before')"
+                        (keydown.space)="$event.preventDefault(); uploadMedia(task.id, 'before')"
+                        class="aspect-video bg-[var(--bg-primary)] border-2 border-dashed border-[var(--border-color)] rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:border-raqeeb-azure transition-colors group overflow-hidden relative">
+                      @if (task.beforePhoto) {
+                        <img [src]="task.beforePhoto" class="w-full h-full object-cover" alt="Before photo evidence">
+                      } @else {
+                        <i class="pi pi-camera text-[var(--text-secondary)] group-hover:scale-105 transition-colors" aria-hidden="true"></i>
+                        <span class="text-[8px] font-bold text-[var(--text-secondary)] mt-2">{{ 'TASKS.UPLOAD' | translate }}</span>
+                      }
+                   </div>
+                </div>
+                <div class="space-y-3">
+                   <span class="text-[9px] font-black text-[var(--text-secondary)] uppercase tracking-widest">{{ 'TASKS.AFTER' | translate }}</span>
+                   <div (click)="uploadMedia(task.id, 'after')" 
+                        role="button"
+                        tabindex="0"
+                        (keydown.enter)="uploadMedia(task.id, 'after')"
+                        (keydown.space)="$event.preventDefault(); uploadMedia(task.id, 'after')"
+                        class="aspect-video bg-[var(--bg-primary)] border-2 border-dashed border-[var(--border-color)] rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:border-raqeeb-azure transition-colors group overflow-hidden relative">
+                      @if (task.afterPhoto) {
+                        <img [src]="task.afterPhoto" class="w-full h-full object-cover" alt="After photo evidence">
+                      } @else {
+                        <i class="pi pi-camera text-[var(--text-secondary)] group-hover:scale-105 transition-colors" aria-hidden="true"></i>
+                        <span class="text-[8px] font-bold text-[var(--text-secondary)] mt-2">{{ 'TASKS.UPLOAD' | translate }}</span>
+                      }
+                   </div>
+                </div>
+             </div>
+          </div>
+        </app-card>
+      }
+    </div>
+  }
+</div>

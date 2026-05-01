@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="dark" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>لوحة تحكم GlobalTrack - نظام التتبع العالمي</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#3b82f6', // Sky Blue
+              dark: '#1e293b',    // Dark Blue
+              accent: '#3c83f6'   // Custom theme color
+            }
+          },
+          borderRadius: {
+            'theme': '8px' // ROUND_EIGHT
+          },
+          fontFamily: {
+            sans: ['Inter', 'Tahoma', 'Arial', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars">
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3b82f6;
+    }
+  </style>
+<style data-purpose="layout-styling">
+    .widget-card {
+      background-color: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+    }
+    .map-container {
+      background-color: #1e293b;
+      position: relative;
+      overflow: hidden;
+      min-height: 400px;
+    }
+  </style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased">
+<!-- BEGIN: AppContainer -->
+<div class="flex h-screen overflow-hidden">
+<!-- BEGIN: SideNavigation -->
+<aside class="w-64 bg-[#0f172a] border-l border-slate-800 flex flex-col hidden md:flex" data-purpose="sidebar">
+<div class="p-6 flex items-center gap-3">
+<div class="w-8 h-8 bg-brand-primary rounded-theme flex items-center justify-center">
+<svg class="h-5 w-5 text-white" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="text-xl font-bold tracking-tight">GlobalTrack</span>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 bg-brand-primary/10 text-brand-primary rounded-theme" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>لوحة التحكم</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-theme transition-colors" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>تتبع مباشر</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-theme transition-colors" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>التقارير الميدانية</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-theme transition-colors" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>المالية</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-700 overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCu-Vx21dkENEr0c5jf4CC9mXfG8Oy_hriju0Ou3TMBK3D58CDcJ8AtWEI_gkLfb5mXqtK2O3eTVrVwY8yW-DGa3dd0vnvwRYvqBlwioiLsAvbfhmU-NKqi9zLC6Gy_nKGnMpj415pA88Qf69HANLfvnwaQ6fZqmDKyb5VOJhsk0OMCmU4InAQW6L09fW_MPbkI_l26XBDRrDySyeA9c41masNrTCfgThb8vwJkFZmRqIDBJKkYFGfPLfqcedHHB6MXTuG5kIHIfiU"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-medium truncate">أحمد المحمد</p>
+<p class="text-xs text-slate-500 truncate">مدير النظام</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: SideNavigation -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 flex flex-col overflow-y-auto">
+<!-- BEGIN: TopBar -->
+<header class="h-16 border-b border-slate-800 bg-[#0f172a]/50 backdrop-blur-md sticky top-0 z-10 px-6 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-slate-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+<h1 class="text-lg font-semibold">نظرة عامة على العمليات</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden sm:block">
+<input class="bg-slate-900 border-slate-700 text-sm rounded-theme w-64 pr-10 focus:ring-brand-primary focus:border-brand-primary" placeholder="بحث..." type="text"/>
+<svg class="w-4 h-4 text-slate-500 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-slate-400 hover:text-white relative">
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<div class="p-6 space-y-6">
+<!-- BEGIN: DashboardGrid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- BEGIN: MapWidget -->
+<section class="lg:col-span-2 widget-card flex flex-col min-h-[500px]" data-purpose="map-widget">
+<div class="p-4 border-b border-slate-800 flex justify-between items-center">
+<h2 class="font-bold flex items-center gap-2 text-brand-primary">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                تتبع العاملين المباشر (GPS)
+              </h2>
+<div class="flex gap-2">
+<span class="bg-green-500/10 text-green-500 text-xs px-2 py-1 rounded-full border border-green-500/20">42 متصل</span>
+<span class="bg-slate-500/10 text-slate-400 text-xs px-2 py-1 rounded-full border border-slate-500/20">8 غير متصل</span>
+</div>
+</div>
+<div class="flex-1 map-container relative">
+<!-- Placeholder for Interactive Map -->
+<canvas class="w-full h-full" id="gpsMapCanvas"></canvas>
+<!-- Live GPS Legend -->
+<div class="absolute bottom-4 right-4 bg-slate-900/95 backdrop-blur-md p-3 rounded-theme border border-slate-700 text-[10px] space-y-2 shadow-2xl z-10">
+<p class="font-bold text-slate-300 border-b border-slate-800 pb-1 mb-2">دليل تتبع GPS</p>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-green-500 rounded-full"></div>
+<span>متحرك حالياً</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-amber-500 rounded-full"></div>
+<span>متوقف (محرك يعمل)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-red-500 rounded-full"></div>
+<span>متوقف (محرك مطفأ)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-slate-500 rounded-full"></div>
+<span>فقد الاتصال</span>
+</div>
+</div>
+<!-- Map UI Overlays -->
+<div class="absolute bottom-4 left-4 flex flex-col gap-2">
+<button class="p-2 bg-slate-900 border border-slate-700 rounded-theme hover:bg-slate-800"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+<button class="p-2 bg-slate-900 border border-slate-700 rounded-theme hover:bg-slate-800"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M20 12H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+</div>
+<!-- Floating Worker Info -->
+<div class="absolute top-4 right-4 bg-slate-900/90 backdrop-blur p-3 rounded-theme border border-slate-700 w-48 shadow-xl">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+<span class="text-xs font-bold">محمد علي (سائق 04)</span>
+</div>
+<div class="space-y-1 text-[10px] text-slate-400">
+<p>السرعة: 65 كم/س</p>
+<p>الموقع: طريق الملك فهد</p>
+<p>الحالة: قيد المهمة</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: MapWidget -->
+<!-- BEGIN: SideWidgets -->
+<div class="space-y-6">
+<!-- Feature 8: Employee Performance Charts Widget -->
+<section class="widget-card p-5" data-purpose="performance-widget">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-semibold text-slate-300">أداء الموظفين (أسبوعي)</h3>
+<button class="text-[10px] text-brand-primary hover:underline">عرض التفاصيل</button>
+</div>
+<div class="h-32 flex items-end gap-2 px-2">
+<div class="flex-1 bg-slate-800 hover:bg-brand-primary/40 transition-colors h-[60%] rounded-t-sm relative group">
+<span class="hidden group-hover:block absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] bg-slate-800 p-1 rounded z-20">60%</span>
+</div>
+<div class="flex-1 bg-slate-800 hover:bg-brand-primary/40 transition-colors h-[80%] rounded-t-sm relative group">
+<span class="hidden group-hover:block absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] bg-slate-800 p-1 rounded z-20">80%</span>
+</div>
+<div class="flex-1 bg-brand-primary h-[95%] rounded-t-sm relative group">
+<span class="hidden group-hover:block absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] bg-slate-800 p-1 rounded z-20">95%</span>
+<div class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] text-brand-primary font-bold">الأعلى</div>
+</div>
+<div class="flex-1 bg-slate-800 hover:bg-brand-primary/40 transition-colors h-[70%] rounded-t-sm relative group">
+<span class="hidden group-hover:block absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] bg-slate-800 p-1 rounded z-20">70%</span>
+</div>
+<div class="flex-1 bg-slate-800 hover:bg-brand-primary/40 transition-colors h-[85%] rounded-t-sm relative group">
+<span class="hidden group-hover:block absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] bg-slate-800 p-1 rounded z-20">85%</span>
+</div>
+</div>
+<div class="flex justify-between mt-5 text-[10px] text-slate-500">
+<span>أحد</span><span>اثنين</span><span>ثلاثاء</span><span>أربعاء</span><span>خميس</span>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-800 space-y-2">
+<div class="flex justify-between items-center text-[10px]">
+<span class="text-slate-400">معدل الانضباط</span>
+<span class="text-green-500">88%</span>
+</div>
+<div class="flex justify-between items-center text-[10px]">
+<span class="text-slate-400">إنجاز المهام</span>
+<span class="text-brand-primary">92%</span>
+</div>
+</div>
+</section>
+<!-- Feature 11: Finance Widget (Detailed Breakdown) -->
+<section class="widget-card p-5" data-purpose="finance-widget">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-sm font-semibold text-slate-300">التسوية المالية (صافي الرواتب)</h3>
+<p class="text-[10px] text-slate-500">إجمالي شهر أكتوبر 2023</p>
+</div>
+<div class="bg-emerald-500/10 text-emerald-500 p-2 rounded-theme">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs">
+<span class="text-slate-400">إجمالي الرواتب (+)</span>
+<span class="font-medium text-slate-200">150,000 ر.س</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-400">السلف المستلمة (-)</span>
+<span class="font-medium text-amber-500">12,500 ر.س</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-400">الديون والمستحقات (-)</span>
+<span class="font-medium text-rose-500">13,000 ر.س</span>
+</div>
+<div class="pt-3 border-t border-slate-800 flex justify-between items-baseline">
+<span class="text-sm font-bold text-slate-100">صافي المستحق (=)</span>
+<span class="text-xl font-bold text-emerald-400">124,500 <span class="text-[10px] font-normal">ر.س</span></span>
+</div>
+<div class="w-full bg-slate-800 rounded-full h-1.5 mt-2">
+<div class="bg-emerald-500 h-1.5 rounded-full" style="width: 83%"></div>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="grid grid-cols-2 gap-3" data-purpose="actions-widget">
+<button class="widget-card p-4 flex flex-col items-center gap-2 hover:bg-brand-primary/5 transition-colors group">
+<div class="p-2 bg-slate-800 rounded-full group-hover:bg-brand-primary/20 text-brand-primary">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="text-xs">مهمة جديدة</span>
+</button>
+<button class="widget-card p-4 flex flex-col items-center gap-2 hover:bg-brand-primary/5 transition-colors group">
+<div class="p-2 bg-slate-800 rounded-full group-hover:bg-brand-primary/20 text-brand-primary">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="text-xs">تصدير تقرير</span>
+</button>
+</section>
+</div>
+<!-- END: SideWidgets -->
+</div>
+<!-- END: DashboardGrid -->
+<!-- BEGIN: SecondaryWidgets -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="widget-card p-4 flex items-center gap-4">
+<div class="w-12 h-12 bg-blue-500/10 rounded-theme flex items-center justify-center text-blue-500">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-slate-500 text-xs uppercase tracking-wider">متوسط السرعة</p>
+<h4 class="text-xl font-bold">58 كم/س</h4>
+</div>
+</div>
+<div class="widget-card p-4 flex items-center gap-4">
+<div class="w-12 h-12 bg-amber-500/10 rounded-theme flex items-center justify-center text-amber-500">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-slate-500 text-xs uppercase tracking-wider">ساعات التشغيل</p>
+<h4 class="text-xl font-bold">1,240 ساعة</h4>
+</div>
+</div>
+<div class="widget-card p-4 flex items-center gap-4">
+<div class="w-12 h-12 bg-purple-500/10 rounded-theme flex items-center justify-center text-purple-500">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-slate-500 text-xs uppercase tracking-wider">نقاط السلامة</p>
+<h4 class="text-xl font-bold">98/100</h4>
+</div>
+</div>
+<div class="widget-card p-4 flex items-center gap-4">
+<div class="w-12 h-12 bg-rose-500/10 rounded-theme flex items-center justify-center text-rose-500">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-slate-500 text-xs uppercase tracking-wider">تنبيهات حرجة</p>
+<h4 class="text-xl font-bold text-rose-500">3 نشطة</h4>
+</div>
+</div>
+</div>
+<!-- END: SecondaryWidgets -->
+</div>
+</main>
+<!-- END: MainContent -->
+</div>
+<!-- END: AppContainer -->
+<script data-purpose="canvas-setup">
+    // Mock map drawing on canvas
+    const canvas = document.getElementById('gpsMapCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+      drawMap();
+    }
+
+    function drawMap() {
+      // Background Grid
+      ctx.strokeStyle = '#24334d';
+      ctx.lineWidth = 1;
+      const step = 40;
+      for (let x = 0; x <= canvas.width; x += step) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= canvas.height; y += step) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+      // Mock "Roads"
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 15;
+      ctx.beginPath();
+      ctx.moveTo(100, 0);
+      ctx.lineTo(100, canvas.height);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(0, 200);
+      ctx.lineTo(canvas.width, 200);
+      ctx.stroke();
+
+      // Worker Pins (Green dots)
+      const workers = [
+        { x: 100, y: 150, color: '#10b981' }, // Green
+        { x: 300, y: 200, color: '#f59e0b' }, // Amber
+        { x: 500, y: 320, color: '#10b981' }, // Green
+        { x: 80, y: 380, color: '#ef4444' }   // Red
+      ];
+
+      workers.forEach(w => {
+        // Pin shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.beginPath();
+        ctx.ellipse(w.x, w.y + 5, 8, 4, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Pin body
+        ctx.fillStyle = w.color;
+        ctx.beginPath();
+        ctx.arc(w.x, w.y, 6, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Pin glow
+        ctx.strokeStyle = w.color + '4D'; // adding alpha
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.arc(w.x, w.y, 10, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+  </script>
+</body></html>

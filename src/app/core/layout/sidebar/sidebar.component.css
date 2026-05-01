@@ -1,0 +1,52 @@
+/* Sidebar Component Styles */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Sidebar dark background override */
+:host > div {
+  background: var(--color-raqeeb-navy) !important;
+}
+
+[data-theme='light'] :host > div {
+  background: var(--color-raqeeb-navy) !important;
+}
+
+/* Nav items inside sidebar are always on dark bg */
+.nav-item {
+  color: rgba(240, 244, 255, 0.45);
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(240, 244, 255, 0.9);
+}
+
+.nav-item.active {
+  background: rgba(0, 242, 255, 0.1);
+  color: var(--color-raqeeb-azure);
+}
+
+.nav-item.active::after {
+  width: 2px;
+}
+
+/* Icon hover effect */
+.nav-item i {
+  transition: transform 150ms ease-out;
+}
+
+.nav-item:hover i {
+  transform: scale(1.1);
+}
+
+/* User card in sidebar */
+.user-card {
+  transition: all 250ms ease-out;
+}
+
+.user-card:hover {
+  border-color: rgba(0, 242, 255, 0.2) !important;
+}
